@@ -1,142 +1,167 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Learn with Sahil</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background: radial-gradient(circle at bottom, #001f3f, #000);
-      height: 100vh;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-family: 'Poppins', sans-serif;
-      text-align: center;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Welcome Page</title>
+<style>
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: radial-gradient(circle at bottom, #020024, #090979, #00d4ff);
+    overflow: hidden;
+    color: white;
+    text-align: center;
+  }
 
-    h1 {
-      font-size: 26px;
-      animation: glow 2s infinite alternate;
-    }
+  h1 {
+    font-size: 28px;
+    animation: glow 2s infinite alternate;
+  }
 
-    @keyframes glow {
-      from { color: #ff00ff; text-shadow: 0 0 10px #ff00ff; }
-      to { color: #00ffff; text-shadow: 0 0 20px #00ffff; }
-    }
+  @keyframes glow {
+    from { color: #ff66ff; }
+    to { color: #00ffff; }
+  }
 
-    .book-image {
-      width: 280px;
-      margin-top: 20px;
-      border-radius: 15px;
-      box-shadow: 0 0 25px rgba(255, 255, 255, 0.5);
-    }
+  img {
+    width: 200px;
+    margin-top: 20px;
+    animation: float 3s ease-in-out infinite;
+  }
 
-    .btn {
-      background-color: #ff0080;
-      border: none;
-      padding: 12px 28px;
-      color: white;
-      font-size: 18px;
-      border-radius: 10px;
-      cursor: pointer;
-      margin-top: 20px;
-      transition: 0.3s;
-    }
+  @keyframes float {
+    0%,100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
 
-    .btn:hover {
-      background-color: #ff66b2;
-      transform: scale(1.1);
-    }
+  h2 {
+    margin-top: 10px;
+    font-size: 30px;
+    animation: textMove 4s infinite alternate;
+  }
 
-    #welcome {
-      display: none;
-      font-size: 30px;
-      color: gold;
-      margin-top: 30px;
-      animation: pop 2s ease-in-out infinite alternate;
-    }
+  @keyframes textMove {
+    from { color: #ffcc00; transform: scale(1); }
+    to { color: #00ffcc; transform: scale(1.1); }
+  }
 
-    @keyframes pop {
-      from { transform: scale(0.9); opacity: 0.7; }
-      to { transform: scale(1.1); opacity: 1; }
-    }
+  p {
+    font-size: 20px;
+    width: 90%;
+    margin: 20px auto;
+    line-height: 1.5;
+    animation: colorChange 5s infinite alternate;
+  }
 
-    canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-    }
-  </style>
+  @keyframes colorChange {
+    from { color: #ff99ff; }
+    to { color: #99ffff; }
+  }
+
+  button {
+    background: #00ccff;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: transform 0.3s;
+  }
+
+  button:hover {
+    transform: scale(1.1);
+    background: #00ffaa;
+  }
+
+  #fireworks {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  #message {
+    font-size: 22px;
+    color: yellow;
+    margin-top: 15px;
+  }
+</style>
 </head>
 <body>
 
-  <h1>✨ Created by Sahil ✨</h1>
+<h1>✨ Created by Sahil ✨</h1>
 
-  <img class="book-image" src="https://cdn.pixabay.com/photo/2016/03/31/20/37/book-1294472_1280.png" alt="Book with bulb">
+<img src="https://cdn.pixabay.com/photo/2016/03/31/20/35/book-1294055_960_720.png" alt="Book with bulb">
 
-  <button class="btn" onclick="showWelcome()">Click Me</button>
+<h2>🌟 Welcome to my Website 🌟</h2>
 
-  <div id="welcome">🎇 Welcome to My Educational Website 🎇</div>
+<p>जहाँ सीख हो रोज़ाना, वहाँ हर राह आसान है,<br>
+हर कदम पर शिक्षा साथ हो — बन जाती है ज़िन्दगी महान है।</p>
 
-  <canvas id="fireworks"></canvas>
+<canvas id="fireworks"></canvas>
 
-  <script>
-    const canvas = document.getElementById('fireworks');
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+<button onclick="redirect()">Click Me</button>
+<div id="message"></div>
 
-    function random(min, max) {
-      return Math.random() * (max - min) + min;
-    }
+<script>
+  // Fireworks animation
+  const canvas = document.getElementById('fireworks');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const particles = [];
 
-    let fireworks = [];
+  function randomColor() {
+    const colors = ['#ff0040', '#00ffea', '#fffc00', '#ff00ff', '#00ff00'];
+    return colors[Math.floor(Math.random() * colors.length)];
+  }
 
-    function createFirework(x, y) {
-      for (let i = 0; i < 50; i++) {
-        fireworks.push({
-          x, y,
-          radius: 2,
-          color: `hsl(${random(0, 360)}, 100%, 70%)`,
-          speedX: random(-4, 4),
-          speedY: random(-4, 4),
-          alpha: 1
-        });
-      }
-    }
-
-    function animateFireworks() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      fireworks.forEach((f, i) => {
-        f.x += f.speedX;
-        f.y += f.speedY;
-        f.alpha -= 0.02;
-        ctx.globalAlpha = f.alpha;
-        ctx.beginPath();
-        ctx.arc(f.x, f.y, f.radius, 0, Math.PI * 2);
-        ctx.fillStyle = f.color;
-        ctx.fill();
-        if (f.alpha <= 0) fireworks.splice(i, 1);
+  function createFirework() {
+    const x = Math.random() * canvas.width;
+    const y = Math.random() * canvas.height / 2;
+    for (let i = 0; i < 30; i++) {
+      particles.push({
+        x: x,
+        y: y,
+        speedX: Math.random() * 6 - 3,
+        speedY: Math.random() * 6 - 3,
+        color: randomColor(),
+        size: Math.random() * 3 + 1,
+        life: 100
       });
-      requestAnimationFrame(animateFireworks);
     }
+  }
 
-    animateFireworks();
+  function drawFireworks() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach((p, i) => {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fillStyle = p.color;
+      ctx.fill();
+      p.x += p.speedX;
+      p.y += p.speedY;
+      p.life--;
+      if (p.life <= 0) particles.splice(i, 1);
+    });
+    requestAnimationFrame(drawFireworks);
+  }
 
-    function showWelcome() {
-      document.getElementById('welcome').style.display = 'block';
-      createFirework(window.innerWidth / 2, window.innerHeight / 2);
-      createFirework(random(0, window.innerWidth), random(0, window.innerHeight));
-    }
-  </script>
+  setInterval(createFirework, 600);
+  drawFireworks();
+
+  // Redirect function
+  function redirect() {
+    document.getElementById("message").innerText = "Wait for 10 seconds please...";
+    setTimeout(() => {
+      window.location.href = "main.html";
+    }, 10000);
+  }
+</script>
+
 </body>
 </html>
