@@ -1,20 +1,229 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Learn with Sahil</title>
-  <style> /* ... */ </style>
+  <title>Welcome to My Educational Website</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: 'Poppins', sans-serif;
+      text-align: center;
+      color: white;
+      background: radial-gradient(circle, #001f3f, #000);
+    }
+
+    h1 {
+      margin-top: 40px;
+      font-size: 38px;
+      color: gold;
+      text-shadow: 0 0 10px yellow, 0 0 25px orange;
+      animation: glow 2s infinite alternate;
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 10px orange, 0 0 20px red; }
+      to { text-shadow: 0 0 20px gold, 0 0 40px yellow; }
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 25px;
+      font-size: 18px;
+      color: white;
+      background: linear-gradient(90deg, #ff9800, #ff5722);
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 0 20px gold;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 30px yellow;
+    }
+
+    /* Book */
+    .book {
+      position: relative;
+      width: 220px;
+      height: 150px;
+      margin: 100px auto;
+      transform-style: preserve-3d;
+      perspective: 1000px;
+    }
+
+    .page {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: #fff8dc;
+      border: 2px solid #b8860b;
+      box-shadow: 0 0 20px rgba(255,255,0,0.5);
+      transform-origin: left;
+      backface-visibility: hidden;
+      border-radius: 10px;
+    }
+
+    .page.left {
+      background: #ffebcd;
+      transform: rotateY(0deg);
+    }
+
+    .page.right {
+      background: #fffacd;
+      transform: rotateY(-180deg);
+    }
+
+    .book.open .page.right {
+      animation: openBook 2s forwards;
+    }
+
+    @keyframes openBook {
+      0% { transform: rotateY(-180deg); }
+      100% { transform: rotateY(0deg); }
+    }
+
+    /* Bulb */
+    .bulb {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 60px;
+      color: yellow;
+      text-shadow: 0 0 30px gold, 0 0 60px orange;
+      animation: blink 1s infinite alternate;
+    }
+
+    @keyframes blink {
+      from { opacity: 0.4; }
+      to { opacity: 1; }
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+  </style>
 </head>
 <body>
-  <h1>Welcome to Learn with Sahil</h1>
-  <p>This is my first educational website.</p>
-  <button id="clickButton">Click Me</button>
+  <canvas id="fireworks"></canvas>
+  <h1>📚 Welcome to My Educational Website 💡</h1>
+  <button onclick="openBook()">Click Me</button>
+
+  <div class="book" id="book">
+    <div class="page left"></div>
+    <div class="page right"></div>
+  </div>
+
+  <div class="bulb" id="bulb">💡</div>
 
   <script>
-    document.getElementById("clickButton").addEventListener("click", function() {
-      alert("🎉 Welcome! This popup alert is working perfectly!");
-    });
+    const canvas = document.getElementById('fireworks');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    let fireworks = [];
+
+    function random(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    class Firework {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = canvas.height;
+        this.targetY = random(100, 400);
+        this.color = `hsl(${Math.random() * 360}, 100%, 60%)`;
+        this.particles = [];
+        this.exploded = false;
+      }
+
+      update() {
+        if (!this.exploded) {
+          this.y -= 6;
+          if (this.y <= this.targetY) this.explode();
+        }
+        this.particles.forEach(p => p.update());
+      }
+
+      explode() {
+        this.exploded = true;
+        for (let i = 0; i < 60; i++) {
+          this.particles.push(new Particle(this.x, this.y, this.color));
+        }
+      }
+
+      draw() {
+        if (!this.exploded) {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, 3, 0, Math.PI * 2);
+          ctx.fillStyle = this.color;
+          ctx.fill();
+        }
+        this.particles.forEach(p => p.draw());
+      }
+    }
+
+    class Particle {
+      constructor(x, y, color) {
+        this.x = x;
+        this.y = y;
+        this.color = color;
+        this.angle = Math.random() * 2 * Math.PI;
+        this.speed = Math.random() * 4 + 1;
+        this.alpha = 1;
+      }
+
+      update() {
+        this.x += Math.cos(this.angle) * this.speed;
+        this.y += Math.sin(this.angle) * this.speed;
+        this.alpha -= 0.02;
+      }
+
+      draw() {
+        ctx.globalAlpha = this.alpha;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      }
+    }
+
+    function animate() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.2)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      fireworks.forEach(fw => {
+        fw.update();
+        fw.draw();
+      });
+      fireworks = fireworks.filter(fw => fw.particles.some(p => p.alpha > 0));
+      requestAnimationFrame(animate);
+    }
+
+    function openBook() {
+      const book = document.getElementById('book');
+      const bulb = document.getElementById('bulb');
+      book.classList.add('open');
+      alert("📖 ज्ञान का उजाला शुरू हो गया! 💡");
+
+      setTimeout(() => {
+        bulb.style.display = 'block';
+      }, 1800);
+
+      for (let i = 0; i < 10; i++) {
+        setTimeout(() => fireworks.push(new Firework()), i * 300);
+      }
+      animate();
+    }
   </script>
 </body>
 </html>
