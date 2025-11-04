@@ -1,167 +1,110 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Welcome Page</title>
-<style>
-  body {
-    margin: 0;
-    font-family: 'Poppins', sans-serif;
-    background: radial-gradient(circle at bottom, #020024, #090979, #00d4ff);
-    overflow: hidden;
-    color: white;
-    text-align: center;
-  }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Learn with Sahil</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to bottom right, #0a0a2a, #004aad);
+      color: white;
+      text-align: center;
+      overflow: hidden;
+    }
 
-  h1 {
-    font-size: 28px;
-    animation: glow 2s infinite alternate;
-  }
+    h1 {
+      font-size: 38px;
+      margin-top: 40px;
+      animation: glow 2s infinite alternate;
+    }
 
-  @keyframes glow {
-    from { color: #ff66ff; }
-    to { color: #00ffff; }
-  }
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #00ffff; }
+      to { text-shadow: 0 0 25px #00ffff, 0 0 50px #00ffff; }
+    }
 
-  img {
-    width: 200px;
-    margin-top: 20px;
-    animation: float 3s ease-in-out infinite;
-  }
+    .shayari {
+      margin: 15px auto;
+      font-size: 20px;
+      font-style: italic;
+      color: #f2f2f2;
+    }
 
-  @keyframes float {
-    0%,100% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
-  }
+    .image {
+      margin: 30px auto;
+    }
 
-  h2 {
-    margin-top: 10px;
-    font-size: 30px;
-    animation: textMove 4s infinite alternate;
-  }
+    .image img {
+      width: 200px;
+      animation: float 3s ease-in-out infinite;
+    }
 
-  @keyframes textMove {
-    from { color: #ffcc00; transform: scale(1); }
-    to { color: #00ffcc; transform: scale(1.1); }
-  }
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
 
-  p {
-    font-size: 20px;
-    width: 90%;
-    margin: 20px auto;
-    line-height: 1.5;
-    animation: colorChange 5s infinite alternate;
-  }
+    .btn {
+      background: #ff0080;
+      border: none;
+      color: white;
+      font-size: 20px;
+      padding: 12px 30px;
+      border-radius: 30px;
+      cursor: pointer;
+      margin-top: 20px;
+      animation: pulse 1.5s infinite;
+    }
 
-  @keyframes colorChange {
-    from { color: #ff99ff; }
-    to { color: #99ffff; }
-  }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(255,0,128,0.7); }
+      70% { box-shadow: 0 0 0 20px rgba(255,0,128,0); }
+      100% { box-shadow: 0 0 0 0 rgba(255,0,128,0); }
+    }
 
-  button {
-    background: #00ccff;
-    color: white;
-    border: none;
-    padding: 15px 30px;
-    font-size: 18px;
-    border-radius: 8px;
-    cursor: pointer;
-    margin-top: 20px;
-    transition: transform 0.3s;
-  }
+    .fireworks {
+      display: none;
+      font-size: 22px;
+      margin-top: 20px;
+      color: #ffea00;
+    }
 
-  button:hover {
-    transform: scale(1.1);
-    background: #00ffaa;
-  }
-
-  #fireworks {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    pointer-events: none;
-    z-index: -1;
-  }
-
-  #message {
-    font-size: 22px;
-    color: yellow;
-    margin-top: 15px;
-  }
-</style>
+    .loading {
+      display: none;
+      margin-top: 20px;
+      font-size: 18px;
+    }
+  </style>
 </head>
 <body>
+  <h1>✨ Created by Sahil ✨</h1>
+  <div class="shayari">"ख्वाब वो नहीं जो नींद में आए, ख्वाब वो हैं जो हमें नींद ना आने दें..."</div>
 
-<h1>✨ Created by Sahil ✨</h1>
+  <div class="image">
+    <img src="https://cdn.pixabay.com/photo/2014/04/02/10/54/book-303319_1280.png" alt="Book with Bulb">
+  </div>
 
-<img src="https://cdn.pixabay.com/photo/2016/03/31/20/35/book-1294055_960_720.png" alt="Book with bulb">
+  <button class="btn" id="clickBtn">Click Me</button>
+  <div class="fireworks" id="fireworks">🎆 पटाखे फूट रहे हैं 🎆</div>
+  <div class="loading" id="loading">⏳ कृपया 5 सेकंड प्रतीक्षा करें...</div>
 
-<h2>🌟 Welcome to my Website 🌟</h2>
+  <script>
+    const btn = document.getElementById("clickBtn");
+    const fireworks = document.getElementById("fireworks");
+    const loading = document.getElementById("loading");
 
-<p>जहाँ सीख हो रोज़ाना, वहाँ हर राह आसान है,<br>
-हर कदम पर शिक्षा साथ हो — बन जाती है ज़िन्दगी महान है।</p>
-
-<canvas id="fireworks"></canvas>
-
-<button onclick="redirect()">Click Me</button>
-<div id="message"></div>
-
-<script>
-  // Fireworks animation
-  const canvas = document.getElementById('fireworks');
-  const ctx = canvas.getContext('2d');
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  const particles = [];
-
-  function randomColor() {
-    const colors = ['#ff0040', '#00ffea', '#fffc00', '#ff00ff', '#00ff00'];
-    return colors[Math.floor(Math.random() * colors.length)];
-  }
-
-  function createFirework() {
-    const x = Math.random() * canvas.width;
-    const y = Math.random() * canvas.height / 2;
-    for (let i = 0; i < 30; i++) {
-      particles.push({
-        x: x,
-        y: y,
-        speedX: Math.random() * 6 - 3,
-        speedY: Math.random() * 6 - 3,
-        color: randomColor(),
-        size: Math.random() * 3 + 1,
-        life: 100
-      });
-    }
-  }
-
-  function drawFireworks() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    particles.forEach((p, i) => {
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-      ctx.fillStyle = p.color;
-      ctx.fill();
-      p.x += p.speedX;
-      p.y += p.speedY;
-      p.life--;
-      if (p.life <= 0) particles.splice(i, 1);
+    btn.addEventListener("click", () => {
+      fireworks.style.display = "block";
+      loading.style.display = "block";
+      btn.style.display = "none";
+      setTimeout(() => {
+        window.location.href = "./lessons/index.html";
+      }, 5000);
     });
-    requestAnimationFrame(drawFireworks);
-  }
-
-  setInterval(createFirework, 600);
-  drawFireworks();
-
-  // Redirect function
-  function redirect() {
-    document.getElementById("message").innerText = "Wait for 10 seconds please...";
-    setTimeout(() => {
-      window.location.href = "main.html";
-    }, 10000);
-  }
-</script>
-
+  </script>
 </body>
 </html>
